@@ -32,6 +32,18 @@ func SetMongoDB(setdbName string, url string) {
 	dbName = setdbName
 }
 
+func UnsetMongoDB() {
+        ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+        err := Client.Disconnect(ctx)
+        defer cancel()
+
+        if err != nil {
+                //defer cancel()
+                logger.MongoDBLog.Panic(err.Error())
+        }
+}
+
+
 func RestfulAPIGetOne(collName string, filter bson.M) map[string]interface{} {
 
 	collection := Client.Database(dbName).Collection(collName)
